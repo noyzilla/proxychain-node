@@ -4,7 +4,8 @@ const ProxyChain = require('proxy-chain');
 const CONFIG = {
     PORT: process.env.PORT || 8000,
     UPSTREAM: process.env.UPSTREAM || null,
-    VERBOSE: process.env.VERBOSE || false
+    VERBOSE: process.env.VERBOSE || false,
+    STIME: new Date().getTime(),
 };
 
 const server = new ProxyChain.Server({
@@ -14,7 +15,8 @@ const server = new ProxyChain.Server({
         let upstreamProxyUrl = CONFIG.UPSTREAM;
         if (upstreamProxyUrl) {
             upstreamProxyUrl = upstreamProxyUrl.replace(/<username>/, username);
-            upstreamProxyUrl = upstreamProxyUrl.replace(/<random>/, String(Math.random()));
+            upstreamProxyUrl = upstreamProxyUrl.replace(/<random>/, String(Math.random()));;
+            upstreamProxyUrl = upstreamProxyUrl.replace(/<stime>/, CONFIG.STIME);
         }
         return {
             upstreamProxyUrl: upstreamProxyUrl
