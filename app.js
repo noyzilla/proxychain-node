@@ -14,14 +14,26 @@ const CONFIG = {
     ),
     UPSTREAM: process.env.UPSTREAM || null,
     VERBOSE: process.env.VERBOSE || false,
+    BYPASS_REGEX: new RegExp(
+        Array.from(
+            new String(process.env.BYPASS || "").split(/,/).filter((p) => p)
+        ).join('|').replace(/\./g, '\\.'),
+    ),
     TIME: new Date().getTime(),
 };
+
+function isByPass(hostname) {
+    return CONFIG.BYPASS_REGEX.test(hostname);
+}
 
 CONFIG.PORTS.forEach(cport => {
     const server = new ProxyChain.Server({
         port: cport,
         verbose: CONFIG.VERBOSE,
-        prepareRequestFunction: ({username, password}) => {
+        prepareRequestFunction: ({username, password, hostname}) => {
+            if (isByPass(hostname))
+                return {};
+
             let upstreamProxyUrl = CONFIG.UPSTREAM;
             if (upstreamProxyUrl) {
                 upstreamProxyUrl = upstreamProxyUrl.replace(/<cport>/, cport);
@@ -39,13 +51,6 @@ CONFIG.PORTS.forEach(cport => {
         console.log(`Proxy server is listening on port ${server.port}`);
     });
 
-    // Emitted when HTTP connection is closed
-    server.on('connectionClosed', ({connectionId, stats}) => {
-        console.log(`Connection ${connectionId} closed`);
-        console.dir(stats);
-    });
-
-    // Emitted when HTTP request fails
     server.on('requestFailed', ({request, error}) => {
         console.log(`Request ${request.url} failed`);
         console.error(error);
