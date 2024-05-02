@@ -17,7 +17,7 @@ const CONFIG = {
     TIME: new Date().getTime(),
 };
 
-CONFIG.PORTS.forEach(key_port => {
+CONFIG.PORTS.forEach(cport => {
     const server = new ProxyChain.Server({
         port: cport,
         verbose: CONFIG.VERBOSE,
