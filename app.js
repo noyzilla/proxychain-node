@@ -36,10 +36,10 @@ CONFIG.PORTS.forEach(cport => {
 
             let upstreamProxyUrl = CONFIG.UPSTREAM;
             if (upstreamProxyUrl) {
-                upstreamProxyUrl = upstreamProxyUrl.replace(/<cport>/, cport);
-                upstreamProxyUrl = upstreamProxyUrl.replace(/<ctime>/, CONFIG.TIME);
-                upstreamProxyUrl = upstreamProxyUrl.replace(/<random>/, String(Math.random()));
-                upstreamProxyUrl = upstreamProxyUrl.replace(/<username>/, username);
+                upstreamProxyUrl = upstreamProxyUrl.replace(/<cport>/g, cport);
+                upstreamProxyUrl = upstreamProxyUrl.replace(/<ctime>/g, CONFIG.TIME);
+                upstreamProxyUrl = upstreamProxyUrl.replace(/<random>/g, String(Math.random()));
+                upstreamProxyUrl = upstreamProxyUrl.replace(/<username>/g, username);
             }
             return {
                 upstreamProxyUrl: upstreamProxyUrl
