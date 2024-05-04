@@ -1,3 +1,5 @@
+.asset.
+.static.
 .dbankcdn.com
 .dbankcloud.
 .demdex.net
@@ -12,9 +14,6 @@
 .myhuaweicloud.com
 .naver.jp
 .taboola.com
-asset
 instantmessaging-pa.googleapis.com
 update.googleapis.com
-line-apps
-static
 www.google.com
