@@ -26,6 +26,9 @@ const CONFIG = {
     TIME: new Date().getTime(),
 };
 
+console.log('CONFIG:', CONFIG);
+console.log('DEFAULT_BYPASS_REGEX:', DEFAULT_BYPASS_REGEX);
+
 function isByPass(hostname) {
     if (CONFIG.BYPASS_REGEX.test(hostname))
         return true;
