@@ -1,10 +1,15 @@
 require('dotenv').config();
 
+const fs = require('fs');
 const ProxyChain = require('proxy-chain');
+
+const DEFAULT_BYPASS_REGEX = new RegExp(
+    fs.readFileSync('bypass.txt', 'utf8').split(/\r?\n/).filter((p) => p).join('|').replace(/\./g, '\\.')
+);
 
 const CONFIG = {
     PORTS: Array.from(
-        new String(process.env.PORTS || "8000").split(/,/).map((p) => {
+        (process.env.PORTS || "8000").split(/,/).map((p) => {
             if (p.indexOf('-') > 0) {
                 const [start, end] = p.split(/-/).map((v) => parseInt(v));
                 return Array.from({length: end - start + 1}, (v, k) => start + k);
@@ -15,15 +20,15 @@ const CONFIG = {
     UPSTREAM: process.env.UPSTREAM || null,
     VERBOSE: process.env.VERBOSE || false,
     BYPASS_REGEX: new RegExp(
-        Array.from(
-            new String(process.env.BYPASS || "").split(/,/).filter((p) => p)
-        ).join('|').replace(/\./g, '\\.'),
+        (process.env.BYPASS || "").split(/,/).filter((p) => p).join('|').replace(/\./g, '\\.')
     ),
     TIME: new Date().getTime(),
 };
 
 function isByPass(hostname) {
-    return CONFIG.BYPASS_REGEX.test(hostname);
+    if (CONFIG.BYPASS_REGEX.test(hostname))
+        return true;
+    return DEFAULT_BYPASS_REGEX.test(hostname);
 }
 
 CONFIG.PORTS.forEach(cport => {
