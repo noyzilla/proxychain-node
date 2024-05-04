@@ -1,5 +1,6 @@
 .asset.
 .static.
+.adobedtm.com
 .dbankcdn.com
 .dbankcloud.
 .demdex.net
@@ -14,6 +15,10 @@
 .myhuaweicloud.com
 .naver.jp
 .taboola.com
+.ytimg.com
+.google.com
 instantmessaging-pa.googleapis.com
 update.googleapis.com
-www.google.com
+gvt1.com
+gvt2.com
+.ampproject.org
