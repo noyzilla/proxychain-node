@@ -19,6 +19,7 @@ const CONFIG = {
     ),
     UPSTREAM: process.env.UPSTREAM || null,
     VERBOSE: process.env.VERBOSE || false,
+    VERBOSE_UPSTREAM: process.env.VERBOSE_UPSTREAM || false,
     BYPASS_REGEX: new RegExp(
         (process.env.BYPASS || "").split(/,/).filter((p) => p).join('|').replace(/\./g, '\\.')
     ),
@@ -35,7 +36,7 @@ CONFIG.PORTS.forEach(cport => {
     const server = new ProxyChain.Server({
         port: cport,
         verbose: CONFIG.VERBOSE,
-        prepareRequestFunction: ({username, password, hostname}) => {
+        prepareRequestFunction: ({username, password, hostname, port}) => {
             if (isByPass(hostname))
                 return {};
 
@@ -45,6 +46,10 @@ CONFIG.PORTS.forEach(cport => {
                 upstreamProxyUrl = upstreamProxyUrl.replace(/<ctime>/g, CONFIG.TIME);
                 upstreamProxyUrl = upstreamProxyUrl.replace(/<random>/g, String(Math.random()));
                 upstreamProxyUrl = upstreamProxyUrl.replace(/<username>/g, username);
+
+                if (CONFIG.VERBOSE_UPSTREAM) {
+                    console.log(`ProxyServer[${cport}]: ${hostname}:${port} => ${upstreamProxyUrl}`);
+                }
             }
             return {
                 upstreamProxyUrl: upstreamProxyUrl
