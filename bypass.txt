@@ -23,5 +23,6 @@
 .naver.jp
 .taboola.com
 .ytimg.com
+.xiaomi.com
 instantmessaging-pa.googleapis.com
 update.googleapis.com
