@@ -2,10 +2,9 @@ require('dotenv').config();
 
 const fs = require('fs');
 const ProxyChain = require('proxy-chain');
+const NodeCache = require('node-cache');
 
-const DEFAULT_BYPASS_REGEX = new RegExp(
-    fs.readFileSync('bypass.txt', 'utf8').split(/\r?\n/).filter((p) => p).join('|').replace(/\./g, '\\.')
-);
+const cache = new NodeCache({stdTTL: 600}); //10miniute
 
 const CONFIG = {
     PORTS: Array.from(
@@ -20,19 +19,32 @@ const CONFIG = {
     UPSTREAM: process.env.UPSTREAM || null,
     VERBOSE: process.env.VERBOSE || false,
     VERBOSE_UPSTREAM: process.env.VERBOSE_UPSTREAM || false,
-    BYPASS_REGEX: new RegExp(
-        (process.env.BYPASS || "").split(/,/).filter((p) => p).join('|').replace(/\./g, '\\.')
-    ),
+    BYPASS_REGEX_LIST: (process.env.BYPASS || "").split(/,/).filter((p) => p).map((p) => {
+        return new RegExp(p.trim().replace(/\./g, '\\.'))
+    }),
     TIME: new Date().getTime(),
 };
 
 console.log('CONFIG:', CONFIG);
-console.log('DEFAULT_BYPASS_REGEX:', DEFAULT_BYPASS_REGEX);
 
 function isByPass(hostname) {
-    if (CONFIG.BYPASS_REGEX.test(hostname))
-        return true;
-    return DEFAULT_BYPASS_REGEX.test(hostname);
+    const bypassKey = 'bypass';
+
+    let bypassList = cache.get(bypassKey);
+    if (!bypassList) {
+        bypassList = CONFIG.BYPASS_REGEX_LIST || [];
+        const bypassFromFileList = fs.readFileSync('bypass.txt', 'utf8').split(/\r?\n/).filter((p) => p).map((p) => {
+            return new RegExp(p.trim().replace(/\./g, '\\.'))
+        })
+        bypassList = bypassList.concat(bypassFromFileList);
+        cache.set(bypassKey, bypassList);
+    }
+
+    for (const regex of bypassList) {
+        if (regex.test(hostname))
+            return true;
+    }
+    return false;
 }
 
 CONFIG.PORTS.forEach(cport => {
@@ -61,7 +73,7 @@ CONFIG.PORTS.forEach(cport => {
     });
 
     server.listen(() => {
-        console.log(`Proxy server is listening on port ${server.port}`);
+        //console.log(`Proxy server is listening on port ${server.port}`);
     });
 
     server.on('requestFailed', ({request, error}) => {
