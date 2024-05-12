@@ -26,3 +26,11 @@
 .xiaomi.com
 instantmessaging-pa.googleapis.com
 update.googleapis.com
+.linecorp.com
+.line-apps.com
+.ggpht.com
+.samsungcloud.com
+.linkedin.com
+.hsforms.com
+.hubspot.com
+.hscollectedforms.net
