@@ -34,3 +34,10 @@ update.googleapis.com
 .hsforms.com
 .hubspot.com
 .hscollectedforms.net
+twitter.com
+youtubei.googleapis.com
+quora.com
+website-cdn.ipinfo.io
+hs-scripts.com
+g2crowd.com
+js.
