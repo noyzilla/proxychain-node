@@ -25,6 +25,10 @@
 .ytimg.com
 .xiaomi.com
 instantmessaging-pa.googleapis.com
+instantmessaging-pa-jms-ap.googleapis.com
+crashlyticsreports-pa.googleapis.com
+googletagmanager.com
+youtubei.googleapis.com
 update.googleapis.com
 .linecorp.com
 .line-apps.com
@@ -35,9 +39,14 @@ update.googleapis.com
 .hubspot.com
 .hscollectedforms.net
 twitter.com
-youtubei.googleapis.com
 quora.com
 website-cdn.ipinfo.io
 hs-scripts.com
 g2crowd.com
 js.
+t.co
+cdn.
+branch.io
+typekit.net
+hubapi.com
+weather.com
