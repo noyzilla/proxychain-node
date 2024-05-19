@@ -54,3 +54,4 @@ branch.io
 typekit.net
 hubapi.com
 weather.com
+githubusercontent
